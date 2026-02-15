@@ -1,51 +1,44 @@
 import os
-import urllib
+import hmac
+import json
+import hashlib
+import datetime
 
+import urllib.request
+
+
+B12_URL = "https://b12.io/apply/submission"
+SHA256_SIGNING_SECRET = os.getenv("SHA256_SIGNING_SECRET")
 GITHUB_SERVER_URL = os.getenv("GITHUB_SERVER_URL")
 GITHUB_REPOSITORY = os.getenv("GITHUB_REPOSITORY")
 GITHUB_RUN_ID = os.getenv("GITHUB_RUN_ID")
 
 
-# def _generate_request_body():
-#     {
-#         "timestamp": "2026-01-06T16:59:37.571Z",
-#         "name": "Christopher Antonellis",
-#         "email": "christopher.antonellis@gmail.com",
-#         "resume_link": "https://drive.google.com/file/d/1AyxaOHK4_O6KwUruJg3S9N_57-ROF3lp/view?usp=drive_link",
-#         "repository_link": "https://github.com/chrisantonellis/b12_application",
-#         "action_run_link": "https://link-to-github-or-another-forge.example.com/your/repository/actions/runs/run_id"
-
-#     WORKFLOW_URL="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
-
-#     }
-
-
-
-# url = 'https://httpbin.org/post' # A URL to test POST requests
-
-# # 1. Prepare the data as a dictionary
-# values = {'name': 'John Doe', 'location': 'Anytown'}
-
-# # 2. Encode the data to a URL-encoded string, then to bytes
-# data = urllib.parse.urlencode(values)
-# data = data.encode('utf-8') # data should be bytes
-
-# # 3. Create a Request object. The presence of 'data' implies a POST request.
-# req = urllib.request.Request(url, data=data)
-
-# # 4. Open the URL and send the request
-# try:
-#     with urllib.request.urlopen(req) as response:
-#         response_content = response.read()
-#         print(response_content.decode('utf-8'))
-# except urllib.error.URLError as e:
-#     print(f"Error: {e.reason}")
-
-
 def main():
-    print(GITHUB_SERVER_URL)
-    print(GITHUB_REPOSITORY)
-    print(GITHUB_RUN_ID)
+
+    data = {
+        "action_run_link": f"{GITHUB_SERVER_URL}/{GITHUB_REPOSITORY}/actions/runs/{GITHUB_RUN_ID}",
+        "email": "christopher.antonellis@gmail.com"x``,
+        "name": "Christopher Antonellis",
+        "repository_link": f"{GITHUB_SERVER_URL}/{GITHUB_REPOSITORY}",
+        "resume_link": "https://drive.google.com/file/d/1AyxaOHK4_O6KwUruJg3S9N_57-ROF3lp/view?usp=drive_link",
+        "timestamp": datetime.now().isoformat()
+    }
+
+    data_encoded = json.dumps(data).encode("utf-8")
+    signing_secret_encoded = SHA256_SIGNING_SECRET.encode("utf-8")
+    hex_digest = hmac.new(signing_secret_encoded, data_encoded, hashlib.sha256).hexdigest()
+
+    headers = {
+        "Content-Type": "application/json",
+        "X-Signature-256": f"sha256={hex_digest}"
+    }
+
+    request = urllib.request.Request(B12_URL, data=data, headers=headers)
+
+    with urllib.request.urlopen(request) as response:
+        response_data = response.read().decode("utf-8")
+        print(response_data)
 
 
 if __name__ == "__main__":
