@@ -22,7 +22,7 @@ def main():
         "name": "Christopher Antonellis",
         "repository_link": f"{GITHUB_SERVER_URL}/{GITHUB_REPOSITORY}",
         "resume_link": "https://drive.google.com/file/d/1AyxaOHK4_O6KwUruJg3S9N_57-ROF3lp/view?usp=drive_link",
-        "timestamp": datetime.now().isoformat()
+        "timestamp": datetime.datetime.now().isoformat()
     }
 
     data_encoded = json.dumps(data).encode("utf-8")
