@@ -18,7 +18,7 @@ def main():
 
     data = {
         "action_run_link": f"{GITHUB_SERVER_URL}/{GITHUB_REPOSITORY}/actions/runs/{GITHUB_RUN_ID}",
-        "email": "christopher.antonellis@gmail.com"x``,
+        "email": "christopher.antonellis@gmail.com",
         "name": "Christopher Antonellis",
         "repository_link": f"{GITHUB_SERVER_URL}/{GITHUB_REPOSITORY}",
         "resume_link": "https://drive.google.com/file/d/1AyxaOHK4_O6KwUruJg3S9N_57-ROF3lp/view?usp=drive_link",
