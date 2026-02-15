@@ -16,6 +16,10 @@ GITHUB_RUN_ID = os.getenv("GITHUB_RUN_ID")
 
 def main():
 
+    headers = {
+        "Content-Type": "application/json"
+    }
+
     data = {
         "action_run_link": f"{GITHUB_SERVER_URL}/{GITHUB_REPOSITORY}/actions/runs/{GITHUB_RUN_ID}",
         "email": "christopher.antonellis@gmail.com",
@@ -25,23 +29,15 @@ def main():
         "timestamp": datetime.datetime.now().isoformat()
     }
 
-    data_encoded = json.dumps(data).encode("utf-8")
+    data_encoded = json.dumps(data, separators=(',', ':')).encode("utf-8")
     signing_secret_encoded = SHA256_SIGNING_SECRET.encode("utf-8")
     hex_digest = hmac.new(signing_secret_encoded, data_encoded, hashlib.sha256).hexdigest()
+    headers["X-Signature-256"] = f"sha256={hex_digest}"
 
-    headers = {
-        "Content-Type": "application/json",
-        "X-Signature-256": f"sha256={hex_digest}"
-    }
-
-    print(data)
-    print(headers)
-
-    # request = urllib.request.Request(B12_URL, data=data_encoded, headers=headers)
-
-    # with urllib.request.urlopen(request) as response:
-    #     response_data = response.read().decode("utf-8")
-    #     print(response_data)
+    request = urllib.request.Request(B12_URL, data=data_encoded, headers=headers)
+    with urllib.request.urlopen(request) as response:
+        response_data = response.read().decode("utf-8")
+        print(response_data)
 
 
 if __name__ == "__main__":
