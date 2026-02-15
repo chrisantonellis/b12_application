@@ -34,7 +34,7 @@ def main():
         "X-Signature-256": f"sha256={hex_digest}"
     }
 
-    request = urllib.request.Request(B12_URL, data=data, headers=headers)
+    request = urllib.request.Request(B12_URL, data=data_encoded, headers=headers)
 
     with urllib.request.urlopen(request) as response:
         response_data = response.read().decode("utf-8")
