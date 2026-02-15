@@ -1,15 +1,24 @@
+import os
 import urllib
 
+GITHUB_SERVER_URL = os.getenv("GITHUB_SERVER_URL")
+GITHUB_REPOSITORY = os.getenv("GITHUB_REPOSITORY")
+GITHUB_RUN_ID = os.getenv("GITHUB_RUN_ID")
 
-def generate_request_body():
-    {
-        "timestamp": "2026-01-06T16:59:37.571Z",
-        "name": "Your name",
-        "email": "you@example.com",
-        "resume_link": "https://pdf-or-html-or-linkedin.example.com",
-        "repository_link": "https://link-to-github-or-other-forge.example.com/your/repository",
-        "action_run_link": "https://link-to-github-or-another-forge.example.com/your/repository/actions/runs/run_id"
-    }
+
+# def _generate_request_body():
+#     {
+#         "timestamp": "2026-01-06T16:59:37.571Z",
+#         "name": "Christopher Antonellis",
+#         "email": "christopher.antonellis@gmail.com",
+#         "resume_link": "https://drive.google.com/file/d/1AyxaOHK4_O6KwUruJg3S9N_57-ROF3lp/view?usp=drive_link",
+#         "repository_link": "https://github.com/chrisantonellis/b12_application",
+#         "action_run_link": "https://link-to-github-or-another-forge.example.com/your/repository/actions/runs/run_id"
+
+#     WORKFLOW_URL="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+
+#     }
+
 
 
 # url = 'https://httpbin.org/post' # A URL to test POST requests
@@ -34,7 +43,9 @@ def generate_request_body():
 
 
 def main():
-    print("executing github action")
+    print(GITHUB_SERVER_URL)
+    print(GITHUB_REPOSITORY)
+    print(GITHUB_RUN_ID)
 
 
 if __name__ == "__main__":
